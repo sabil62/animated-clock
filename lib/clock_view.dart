@@ -88,6 +88,20 @@ class ClockPainter extends CustomPainter {
         60 * sin((dateTime.hour * 30 + dateTime.minute * 0.5) * (pi / 180));
     canvas.drawLine(center, Offset(hourHandX, hourHandY), hourHand);
     canvas.drawCircle(center, 16, smallCenter);
+
+    var dashBrush = Paint()
+      ..color = Colors.grey[50].withOpacity(0.6)
+      ..strokeWidth = 1;
+    var outerCircleRadius = radius;
+    var innerCircleRadius = radius - 14;
+    for (double i = 0; i < 360; i += 12) {
+      var x1 = centerX + outerCircleRadius * cos(i * pi / 180);
+      var y1 = centerX + outerCircleRadius * sin(i * pi / 180);
+
+      var x2 = centerX + innerCircleRadius * cos(i * pi / 180);
+      var y2 = centerX + innerCircleRadius * sin(i * pi / 180);
+      canvas.drawLine(Offset(x1, y1), Offset(x2, y2), dashBrush);
+    }
   }
 
   @override
