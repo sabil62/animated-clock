@@ -12,7 +12,39 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
         backgroundColor: Color(0xFF2D2F41),
         body: Center(
-          child: ClockView(),
+          child: Column(
+            children: [
+              Text(
+                "Clock",
+                style: TextStyle(fontSize: 24, color: Colors.white),
+              ),
+              Text(
+                "Clock",
+                style: TextStyle(fontSize: 64, color: Colors.white),
+              ),
+              Text(
+                "Clock",
+                style: TextStyle(fontSize: 20, color: Colors.white),
+              ),
+              ClockView(),
+              Text(
+                "Timezone",
+                style: TextStyle(fontSize: 24, color: Colors.white),
+              ),
+              Row(
+                children: [
+                  Icon(
+                    Icons.language,
+                    color: Colors.white,
+                  ),
+                  Text(
+                    "UTC",
+                    style: TextStyle(fontSize: 24, color: Colors.white),
+                  )
+                ],
+              )
+            ],
+          ),
         )
 
         //  Container(
