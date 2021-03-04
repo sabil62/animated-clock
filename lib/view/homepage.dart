@@ -1,5 +1,5 @@
-import 'package:animated_clock/clock_view.dart';
 import 'package:animated_clock/json/sidebar.dart';
+import 'package:animated_clock/view/clock_view.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 

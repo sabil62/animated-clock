@@ -1,4 +1,5 @@
-import 'package:animated_clock/homepage.dart';
+import 'package:animated_clock/view/homepage.dart';
+
 import 'package:flutter/material.dart';
 
 void main() {
