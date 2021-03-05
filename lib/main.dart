@@ -1,6 +1,10 @@
+import 'package:animated_clock/enum.dart';
+import 'package:animated_clock/model/menuType.dart';
+
 import 'package:animated_clock/view/homepage.dart';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 void main() {
   runApp(MyApp());
@@ -13,7 +17,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Animated Clock App',
       debugShowCheckedModeBanner: false,
-      home: HomePage(),
+      home: ChangeNotifierProvider(
+          create: (context) => MenuClass(MenuType.clock), child: HomePage()),
     );
   }
 }
