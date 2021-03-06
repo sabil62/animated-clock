@@ -1,6 +1,7 @@
 // import 'package:animated_clock/json/sidebar.dart';
 import 'package:animated_clock/json/sidebarProvider.dart';
 import 'package:animated_clock/model/menuType.dart';
+import 'package:animated_clock/view/alarm_view.dart';
 import 'package:animated_clock/view/clock_view.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -48,9 +49,14 @@ class _HomePageState extends State<HomePage> {
             Expanded(
               child: Consumer(builder:
                   (BuildContext context, MenuClass value, Widget child) {
-                if (value.text != "Clock") {
-                  //OR if(value.MenuType != MenuClass.clock)
+                if (value.text == "Stopwatch") {
                   return Container();
+                }
+                if (value.text == "Timer") {
+                  return Container();
+                }
+                if (value.text == "Alarm") {
+                  return AlarmView();
                 }
                 return ClockPart(
                     formattedTime: formattedTime,
