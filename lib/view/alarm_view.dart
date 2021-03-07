@@ -31,13 +31,14 @@ class _AlarmViewState extends State<AlarmView> {
                       decoration: BoxDecoration(
                           boxShadow: [
                             BoxShadow(
-                                color: Colors.red.withOpacity(0.33),
-                                spreadRadius: 2,
+                                color: ala.gradients.last.withOpacity(0.33),
+                                spreadRadius: 1.7,
                                 blurRadius: 8,
                                 offset: Offset(3, 4))
                           ],
                           gradient: LinearGradient(
-                              colors: [Colors.purple, Colors.pink],
+                              // colors: [Colors.purple, Colors.pink],
+                              colors: ala.gradients,
                               begin: Alignment.centerLeft,
                               end: Alignment.centerRight),
                           borderRadius: BorderRadius.circular(16.0)),
