@@ -1,4 +1,6 @@
+import 'package:animated_clock/constants/theme_data.dart';
 import 'package:animated_clock/json/alarmJson.dart';
+import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 
 class AlarmView extends StatefulWidget {
@@ -24,7 +26,7 @@ class _AlarmViewState extends State<AlarmView> {
           Expanded(
               child: ListView(
             children: alarmData
-                .map((ala) => Container(
+                .map<Widget>((ala) => Container(
                       margin: EdgeInsetsDirectional.only(bottom: 26),
                       padding:
                           EdgeInsets.symmetric(vertical: 12, horizontal: 9),
@@ -95,7 +97,53 @@ class _AlarmViewState extends State<AlarmView> {
                         ],
                       ),
                     ))
-                .toList(),
+                .followedBy([
+              DottedBorder(
+                dashPattern: [5, 4],
+                strokeWidth: 3,
+                color: CustomColors.clockOutline,
+                borderType: BorderType.RRect,
+                radius: Radius.circular(12),
+                child: Container(
+                  width: double.infinity,
+                  height: 100,
+                  decoration: BoxDecoration(
+                      color: CustomColors.clockBG,
+                      borderRadius: BorderRadius.circular(14)),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      TextButton(
+                          onPressed: () {},
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 12, horizontal: 50),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                Image.asset(
+                                  "assets/add_alarm.png",
+                                  scale: 1.7,
+                                ),
+                                SizedBox(
+                                  height: 3,
+                                ),
+                                Text(
+                                  "Add Alarm",
+                                  style: TextStyle(
+                                      fontSize: 12,
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                      fontFamily: "avenir"),
+                                )
+                              ],
+                            ),
+                          )),
+                    ],
+                  ),
+                ),
+              )
+            ]).toList(),
           ))
         ],
       ),
