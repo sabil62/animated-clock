@@ -69,6 +69,7 @@ class _AlarmViewState extends State<AlarmView> {
                                   )
                                 ],
                               ),
+                              //This is toggle widget
                               Switch(
                                 value: true,
                                 onChanged: (bool value) {},
