@@ -2,6 +2,7 @@ import 'package:animated_clock/constants/theme_data.dart';
 import 'package:animated_clock/json/alarmJson.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 class AlarmView extends StatefulWidget {
   @override
@@ -9,6 +10,47 @@ class AlarmView extends StatefulWidget {
 }
 
 class _AlarmViewState extends State<AlarmView> {
+  // get flutterLocalNotificationsPlugin => null;
+
+  @override
+  void initState() {
+    super.initState();
+
+    // initialise the plugin. app_icon needs to be a added as a drawable resource to the Android head project
+    const AndroidInitializationSettings initializationSettingsAndroid =
+        AndroidInitializationSettings('sabil_Cube');
+    final IOSInitializationSettings initializationSettingsIOS =
+        IOSInitializationSettings();
+    final InitializationSettings initializationSettings =
+        InitializationSettings(
+            android: initializationSettingsAndroid,
+            iOS: initializationSettingsIOS);
+    var localNotification = new FlutterLocalNotificationsPlugin();
+    localNotification.initialize(initializationSettings,
+        onSelectNotification: (String payload) async {
+      if (payload != null) {
+        debugPrint("nofification payload: " + payload);
+      }
+    });
+    // FlutterLocalNotificationsPlugin.initialize(initializationSettings);
+  }
+
+  Future onShowLocalNotification() async {
+    // display a dialog with the notification details, tap ok to go to another page
+    const AndroidNotificationDetails androidPlatformChannelSpecifics =
+        AndroidNotificationDetails(
+            'channelId', 'Local Notification', 'Anything',
+            importance: Importance.max,
+            priority: Priority.high,
+            showWhen: false);
+    // var iosDetails = new IOSNotificationDetails();
+    const NotificationDetails platformChannelSpecifics =
+        NotificationDetails(android: androidPlatformChannelSpecifics);
+    await FlutterLocalNotificationsPlugin().show(
+        0, 'Lion', 'Tiger is the real king of jungle', platformChannelSpecifics,
+        payload: 'item x');
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -115,7 +157,10 @@ class _AlarmViewState extends State<AlarmView> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       TextButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            // scheduleAlarm();
+                            onShowLocalNotification();
+                          },
                           child: Padding(
                             padding: const EdgeInsets.symmetric(
                                 vertical: 12, horizontal: 50),
@@ -150,4 +195,22 @@ class _AlarmViewState extends State<AlarmView> {
       ),
     );
   }
+
+  // void scheduleAlarm() async {
+  //   const AndroidNotificationDetails androidPlatformChannelSpecifics =
+  //       AndroidNotificationDetails('channelId', 'Animated Clock', 'Anything',
+  //           importance: Importance.max,
+  //           priority: Priority.high,
+  //           showWhen: false);
+
+  //   const NotificationDetails platformChannelSpecifics =
+  //       NotificationDetails(android: androidPlatformChannelSpecifics);
+  //   await AnimatedClock.show(
+  //       2,
+  //       'Title of Notification',
+  //       'Body of Notifiication larger lorem sorem borem',
+  //       platformChannelSpecifics,
+  //       payload: 'item x');
+  // }
+
 }
