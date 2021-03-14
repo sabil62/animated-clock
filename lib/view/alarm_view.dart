@@ -4,6 +4,9 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
+import 'package:timezone/data/latest.dart' as tz;
+import 'package:timezone/timezone.dart' as tz;
+
 class AlarmView extends StatefulWidget {
   @override
   _AlarmViewState createState() => _AlarmViewState();
@@ -15,10 +18,12 @@ class _AlarmViewState extends State<AlarmView> {
   @override
   void initState() {
     super.initState();
+    //timezone
+    // tz.initializeTimeZones();
 
     // initialise the plugin. app_icon needs to be a added as a drawable resource to the Android head project
     const AndroidInitializationSettings initializationSettingsAndroid =
-        AndroidInitializationSettings('sabil_Cube');
+        AndroidInitializationSettings('sabil_cube');
     final IOSInitializationSettings initializationSettingsIOS =
         IOSInitializationSettings();
     final InitializationSettings initializationSettings =
@@ -35,6 +40,10 @@ class _AlarmViewState extends State<AlarmView> {
     // FlutterLocalNotificationsPlugin.initialize(initializationSettings);
   }
 
+  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+      FlutterLocalNotificationsPlugin();
+
+//----------------------Non timed notification---------------------------------
   Future onShowLocalNotification() async {
     // display a dialog with the notification details, tap ok to go to another page
     const AndroidNotificationDetails androidPlatformChannelSpecifics =
@@ -42,13 +51,35 @@ class _AlarmViewState extends State<AlarmView> {
             'channelId', 'Local Notification', 'Anything',
             importance: Importance.max,
             priority: Priority.high,
-            showWhen: false);
+            showWhen: false,
+            //sound (didn't work)  (detected but didnt work in xiomi device)
+            sound: RawResourceAndroidNotificationSound("slow_spring_board"));
     // var iosDetails = new IOSNotificationDetails();
     const NotificationDetails platformChannelSpecifics =
         NotificationDetails(android: androidPlatformChannelSpecifics);
+    //or flutterLocalNotificationsPlugin.show()
     await FlutterLocalNotificationsPlugin().show(
         0, 'Lion', 'Tiger is the real king of jungle', platformChannelSpecifics,
         payload: 'item x');
+  }
+
+  //------------------------------Timed notification(Successfully)---------------------------------
+  Future onTimedShowLocalNotification() async {
+    //VVI
+    tz.initializeTimeZones();
+    // // var detroit = tz.getLocation('America/Detroit');
+    // // print(tz.TZDateTime.now(tz.local));
+    await flutterLocalNotificationsPlugin.zonedSchedule(
+        0,
+        'Timed',
+        'This is after 5 seconds',
+        tz.TZDateTime.now(tz.local).add(const Duration(seconds: 5)),
+        const NotificationDetails(
+            android: AndroidNotificationDetails('channelId',
+                'Local Notification', 'The description of the channel')),
+        androidAllowWhileIdle: true,
+        uiLocalNotificationDateInterpretation:
+            UILocalNotificationDateInterpretation.absoluteTime);
   }
 
   @override
@@ -141,53 +172,67 @@ class _AlarmViewState extends State<AlarmView> {
                       ),
                     ))
                 .followedBy([
-              DottedBorder(
-                dashPattern: [5, 4],
-                strokeWidth: 3,
-                color: CustomColors.clockOutline,
-                borderType: BorderType.RRect,
-                radius: Radius.circular(12),
-                child: Container(
-                  width: double.infinity,
-                  height: 100,
-                  decoration: BoxDecoration(
-                      color: CustomColors.clockBG,
-                      borderRadius: BorderRadius.circular(14)),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      TextButton(
-                          onPressed: () {
-                            // scheduleAlarm();
-                            onShowLocalNotification();
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 12, horizontal: 50),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                Image.asset(
-                                  "assets/add_alarm.png",
-                                  scale: 1.7,
+              Column(
+                children: [
+                  DottedBorder(
+                    dashPattern: [5, 4],
+                    strokeWidth: 3,
+                    color: CustomColors.clockOutline,
+                    borderType: BorderType.RRect,
+                    radius: Radius.circular(12),
+                    child: Container(
+                      width: double.infinity,
+                      height: 100,
+                      decoration: BoxDecoration(
+                          color: CustomColors.clockBG,
+                          borderRadius: BorderRadius.circular(14)),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          TextButton(
+                              onPressed: () {
+                                // scheduleAlarm();
+                                onShowLocalNotification();
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 12, horizontal: 50),
+                                child: Column(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    Image.asset(
+                                      "assets/add_alarm.png",
+                                      scale: 1.7,
+                                    ),
+                                    SizedBox(
+                                      height: 3,
+                                    ),
+                                    Text(
+                                      "Add Alarm",
+                                      style: TextStyle(
+                                          fontSize: 12,
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold,
+                                          fontFamily: "avenir"),
+                                    )
+                                  ],
                                 ),
-                                SizedBox(
-                                  height: 3,
-                                ),
-                                Text(
-                                  "Add Alarm",
-                                  style: TextStyle(
-                                      fontSize: 12,
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,
-                                      fontFamily: "avenir"),
-                                )
-                              ],
-                            ),
-                          )),
-                    ],
+                              )),
+                        ],
+                      ),
+                    ),
                   ),
-                ),
+                  IconButton(
+                    icon: Icon(
+                      Icons.time_to_leave,
+                      size: 30,
+                    ),
+                    onPressed: () {
+                      onTimedShowLocalNotification();
+                    },
+                  )
+                ],
               )
             ]).toList(),
           ))

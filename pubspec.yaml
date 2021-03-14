@@ -21,6 +21,7 @@ environment:
   sdk: ">=2.7.0 <3.0.0"
 
 dependencies:
+  timezone: ^0.6.1
   flutter_local_notifications: ^4.0.1+2
   intl: ^0.16.1
   provider: ^5.0.0
